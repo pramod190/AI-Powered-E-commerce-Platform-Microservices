@@ -1,0 +1,7 @@
+recursive-include src *.py
+recursive-include tests *.py
+include README.md
+include .env.example
+exclude .git
+exclude __pycache__
+exclude *.pyc

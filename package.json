@@ -1,0 +1,21 @@
+{
+  "name": "scalable-ai-ecommerce-platform",
+  "private": true,
+  "workspaces": [
+    "services/*",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "echo \"Use: npm run dev -w <workspace>\"",
+    "lint": "echo \"Use: npm run lint -w <workspace>\"",
+    "build": "echo \"Use: npm run build -w <workspace>\""
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@types/amqplib": "^0.10.8",
+    "amqplib": "^1.0.3",
+    "uuid": "^13.0.0"
+  }
+}
