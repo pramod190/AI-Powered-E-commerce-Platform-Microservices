@@ -34,7 +34,7 @@ export function createApp(repository: IAnalyticsRepository): Express {
       genReqId: () => uuidv4(),
     })
   );
-  app.use(compression());
+  app.use(compression() as any);
 
   // Body parsing
   app.use(express.json());

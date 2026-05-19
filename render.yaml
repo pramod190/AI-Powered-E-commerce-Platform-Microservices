@@ -4,7 +4,7 @@ services:
     name: shophub-product-service
     runtime: node
     rootDir: services/product-service
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: node dist/server.js
     healthCheckPath: /health
     envVars:
@@ -26,7 +26,7 @@ services:
     name: shophub-user-service
     runtime: node
     rootDir: services/user-service
-    buildCommand: npm install && npm run build && npx prisma generate && npx prisma migrate deploy
+    buildCommand: npm install --include=dev && npm run build && npx prisma generate && npx prisma migrate deploy
     startCommand: node dist/server.js
     healthCheckPath: /health
     envVars:
@@ -39,11 +39,11 @@ services:
       - key: LOG_LEVEL
         value: info
       - key: CORS_ORIGINS
-        sync: false          # Set in Render dashboard
+        sync: false
       - key: DATABASE_URL
-        sync: false          # Set in Render dashboard: PostgreSQL connection string
+        sync: false          # PostgreSQL connection string
       - key: JWT_SECRET
-        sync: false          # Set in Render dashboard: long random secret (32+ chars)
+        sync: false          # Long random secret (32+ chars)
       - key: JWT_EXPIRES_IN
         value: 15m
       - key: BCRYPT_SALT_ROUNDS
@@ -54,7 +54,7 @@ services:
     name: shophub-cart-service
     runtime: node
     rootDir: services/cart-service
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: node dist/server.js
     healthCheckPath: /health
     envVars:
@@ -71,7 +71,7 @@ services:
       - key: REDIS_HOST
         sync: false          # Upstash Redis host
       - key: REDIS_PORT
-        sync: false          # Upstash Redis port (usually 6379 or TLS port)
+        sync: false          # Upstash Redis port
       - key: REDIS_PASSWORD
         sync: false          # Upstash Redis password
       - key: CART_TTL
@@ -84,7 +84,7 @@ services:
     name: shophub-order-service
     runtime: node
     rootDir: services/order-service
-    buildCommand: npm install && npm run build && npx prisma generate && npx prisma migrate deploy
+    buildCommand: npm install --include=dev && npm run build && npx prisma generate && npx prisma migrate deploy
     startCommand: node dist/server.js
     healthCheckPath: /health
     envVars:
@@ -99,7 +99,7 @@ services:
       - key: CORS_ORIGINS
         sync: false
       - key: DATABASE_URL
-        sync: false          # PostgreSQL connection string (can be same DB, different schema)
+        sync: false
       - key: PRODUCT_SERVICE_URL
         sync: false
       - key: CART_SERVICE_URL
@@ -107,14 +107,14 @@ services:
       - key: PAYMENT_SERVICE_URL
         sync: false
       - key: RABBITMQ_URL
-        sync: false          # CloudAMQP URL (optional – service gracefully degrades)
+        sync: false          # CloudAMQP URL (optional)
 
   # ── Payment Service ────────────────────────────────────────────────────────
   - type: web
     name: shophub-payment-service
     runtime: node
     rootDir: services/payment-service
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: node dist/server.js
     healthCheckPath: /health
     envVars:
@@ -144,7 +144,7 @@ services:
     name: shophub-analytics-service
     runtime: node
     rootDir: services/analytics-service
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: node dist/server.js
     healthCheckPath: /health
     envVars:

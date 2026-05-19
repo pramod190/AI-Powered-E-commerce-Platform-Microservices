@@ -27,7 +27,7 @@ export function buildApp(): Express {
   );
 
   app.use(helmet());
-  app.use(compression());
+  app.use(compression() as any);
 
   // Important: Express JSON middleware AFTER Stripe webhook route (for webhook signature verification)
   app.use(express.json({ limit: "1mb" }));

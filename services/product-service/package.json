@@ -21,9 +21,7 @@
     "mongoose": "^8.19.0",
     "pino": "^9.6.0",
     "pino-http": "^10.5.0",
-    "zod": "^3.25.76"
-  },
-  "devDependencies": {
+    "zod": "^3.25.76",
     "@types/amqplib": "^0.10.5",
     "@types/compression": "^1.8.1",
     "@types/cors": "^2.8.19",
@@ -31,5 +29,6 @@
     "@types/node": "^20.19.41",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
-  }
+  },
+  "devDependencies": {}
 }
