@@ -16,7 +16,7 @@ export default function App() {
     <Router>
       <AuthProvider>
         <CartProvider>
-          <div className="min-h-screen bg-gray-50">
+          <div className="min-h-screen" style={{ background: '#0a0a0f' }}>
             <Header />
             <main>
               <Routes>

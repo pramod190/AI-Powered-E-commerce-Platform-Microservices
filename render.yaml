@@ -1,0 +1,162 @@
+services:
+  # ── Product Service ────────────────────────────────────────────────────────
+  - type: web
+    name: shophub-product-service
+    runtime: node
+    rootDir: services/product-service
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SERVICE_NAME
+        value: product-service
+      - key: LOG_LEVEL
+        value: info
+      - key: CORS_ORIGINS
+        sync: false          # Set in Render dashboard: your Vercel frontend URL
+      - key: MONGODB_URI
+        sync: false          # Set in Render dashboard: MongoDB Atlas connection string
+
+  # ── User Service ───────────────────────────────────────────────────────────
+  - type: web
+    name: shophub-user-service
+    runtime: node
+    rootDir: services/user-service
+    buildCommand: npm install && npm run build && npx prisma generate && npx prisma migrate deploy
+    startCommand: node dist/server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SERVICE_NAME
+        value: user-service
+      - key: LOG_LEVEL
+        value: info
+      - key: CORS_ORIGINS
+        sync: false          # Set in Render dashboard
+      - key: DATABASE_URL
+        sync: false          # Set in Render dashboard: PostgreSQL connection string
+      - key: JWT_SECRET
+        sync: false          # Set in Render dashboard: long random secret (32+ chars)
+      - key: JWT_EXPIRES_IN
+        value: 15m
+      - key: BCRYPT_SALT_ROUNDS
+        value: 12
+
+  # ── Cart Service ───────────────────────────────────────────────────────────
+  - type: web
+    name: shophub-cart-service
+    runtime: node
+    rootDir: services/cart-service
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SERVICE_NAME
+        value: cart-service
+      - key: LOG_LEVEL
+        value: info
+      - key: CORS_ORIGINS
+        sync: false
+      - key: REDIS_HOST
+        sync: false          # Upstash Redis host
+      - key: REDIS_PORT
+        sync: false          # Upstash Redis port (usually 6379 or TLS port)
+      - key: REDIS_PASSWORD
+        sync: false          # Upstash Redis password
+      - key: CART_TTL
+        value: 86400
+      - key: PRODUCT_SERVICE_URL
+        sync: false          # URL of deployed product service
+
+  # ── Order Service ──────────────────────────────────────────────────────────
+  - type: web
+    name: shophub-order-service
+    runtime: node
+    rootDir: services/order-service
+    buildCommand: npm install && npm run build && npx prisma generate && npx prisma migrate deploy
+    startCommand: node dist/server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SERVICE_NAME
+        value: order-service
+      - key: LOG_LEVEL
+        value: info
+      - key: CORS_ORIGINS
+        sync: false
+      - key: DATABASE_URL
+        sync: false          # PostgreSQL connection string (can be same DB, different schema)
+      - key: PRODUCT_SERVICE_URL
+        sync: false
+      - key: CART_SERVICE_URL
+        sync: false
+      - key: PAYMENT_SERVICE_URL
+        sync: false
+      - key: RABBITMQ_URL
+        sync: false          # CloudAMQP URL (optional – service gracefully degrades)
+
+  # ── Payment Service ────────────────────────────────────────────────────────
+  - type: web
+    name: shophub-payment-service
+    runtime: node
+    rootDir: services/payment-service
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SERVICE_NAME
+        value: payment-service
+      - key: LOG_LEVEL
+        value: info
+      - key: CORS_ORIGINS
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false          # sk_live_... from Stripe dashboard
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false          # whsec_... from Stripe webhook settings
+      - key: ORDER_SERVICE_URL
+        sync: false
+      - key: RABBITMQ_URL
+        sync: false          # Optional
+      - key: CURRENCY
+        value: usd
+
+  # ── Analytics Service ──────────────────────────────────────────────────────
+  - type: web
+    name: shophub-analytics-service
+    runtime: node
+    rootDir: services/analytics-service
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SERVICE_NAME
+        value: analytics-service
+      - key: LOG_LEVEL
+        value: info
+      - key: CORS_ORIGINS
+        sync: false
+      - key: RABBITMQ_URL
+        sync: false          # CloudAMQP URL

@@ -8,6 +8,7 @@ export type CreateProductInput = {
   category: string;
   stock: number;
   description?: string;
+  image?: string;
 };
 
 export type UpdateProductInput = Partial<CreateProductInput>;

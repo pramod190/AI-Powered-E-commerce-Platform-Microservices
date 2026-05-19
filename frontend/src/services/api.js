@@ -4,51 +4,67 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4002'
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 15000,
+  headers: { 'Content-Type': 'application/json' },
 })
 
 // Add token to requests
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
+    if (token) config.headers.Authorization = `Bearer ${token}`
     return config
   },
   (error) => Promise.reject(error)
 )
 
-// Handle errors
+// Handle errors globally
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token')
-      window.location.href = '/login'
+      if (!window.location.pathname.includes('/login')) {
+        window.location.href = '/login'
+      }
     }
     return Promise.reject(error)
   }
 )
 
 export const productService = {
-  searchProducts: (query, category = '', minPrice = 0, maxPrice = 10000, page = 1) =>
-    apiClient.get('/products/search', {
-      params: { q: query, category, minPrice, maxPrice, page, limit: 12 }
-    }),
+  // Primary: search endpoint with optional filters
+  searchProducts: async (query = '', category = '', minPrice = 0, maxPrice = 10000, page = 1) => {
+    const params = { page, limit: 12 }
+    if (query && query.trim()) params.q = query.trim()
+    if (category) params.category = category
+    if (minPrice > 0) params.minPrice = minPrice
+    if (maxPrice < 10000) params.maxPrice = maxPrice
+
+    try {
+      return await apiClient.get('/products/search', { params })
+    } catch {
+      // Fallback to /products if /search fails
+      return await apiClient.get('/products', { params: { category, page, limit: 12 } })
+    }
+  },
+
+  // Fetch all products (fallback)
+  getAllProducts: () => apiClient.get('/products'),
+
   getProduct: (id) => apiClient.get(`/products/${id}`),
-  getProductsByCategory: (category) =>
-    apiClient.get('/products', { params: { category } }),
+
+  createProduct: (data) => apiClient.post('/products', data),
+  updateProduct: (id, data) => apiClient.patch(`/products/${id}`, data),
+  deleteProduct: (id) => apiClient.delete(`/products/${id}`),
 }
 
+/* ── Cart Service ─────────────────────── */
 const CART_SERVICE_URL = import.meta.env.VITE_CART_SERVICE_URL || 'http://localhost:4003'
-const cartClient = axios.create({ baseURL: CART_SERVICE_URL })
-
+const cartClient = axios.create({ baseURL: CART_SERVICE_URL, timeout: 10000 })
 cartClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
+  if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
 
@@ -63,14 +79,12 @@ export const cartService = {
   clearCart: (userId) => cartClient.delete(`/cart/${userId}`),
 }
 
+/* ── Order Service ───────────────────── */
 const ORDER_SERVICE_URL = import.meta.env.VITE_ORDER_SERVICE_URL || 'http://localhost:4004'
-const orderClient = axios.create({ baseURL: ORDER_SERVICE_URL })
-
+const orderClient = axios.create({ baseURL: ORDER_SERVICE_URL, timeout: 10000 })
 orderClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
+  if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
 
@@ -83,32 +97,27 @@ export const orderService = {
     orderClient.patch(`/orders/${orderId}/status`, { status }),
 }
 
+/* ── Payment Service ─────────────────── */
 const PAYMENT_SERVICE_URL = import.meta.env.VITE_PAYMENT_SERVICE_URL || 'http://localhost:4005'
-const paymentClient = axios.create({ baseURL: PAYMENT_SERVICE_URL })
-
+const paymentClient = axios.create({ baseURL: PAYMENT_SERVICE_URL, timeout: 10000 })
 paymentClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
+  if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
 
 export const paymentService = {
   createPaymentIntent: (orderId, amount, currency = 'usd') =>
     paymentClient.post('/payments/intent', { orderId, amount, currency }),
-  getPaymentIntent: (paymentId) =>
-    paymentClient.get(`/payments/${paymentId}`),
+  getPaymentIntent: (paymentId) => paymentClient.get(`/payments/${paymentId}`),
 }
 
+/* ── Recommendation Service ──────────── */
 const RECOMMENDATION_SERVICE_URL = import.meta.env.VITE_RECOMMENDATION_SERVICE_URL || 'http://localhost:4007'
-const recommendationClient = axios.create({ baseURL: RECOMMENDATION_SERVICE_URL })
-
+const recommendationClient = axios.create({ baseURL: RECOMMENDATION_SERVICE_URL, timeout: 10000 })
 recommendationClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
+  if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
 

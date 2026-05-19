@@ -17,7 +17,8 @@ const createSchema = z.object({
   price:       z.number().nonnegative(),
   category:    z.string().min(1).max(120),
   stock:       z.number().int().nonnegative(),
-  description: z.string().max(2000).optional()
+  description: z.string().max(2000).optional(),
+  image:       z.string().url().max(1000).optional()
 });
 
 const updateSchema = createSchema

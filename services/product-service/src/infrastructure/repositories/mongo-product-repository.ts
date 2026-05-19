@@ -19,6 +19,7 @@ function toDomain(doc: any): Product {
     category:    doc.category,
     stock:       doc.stock,
     description: doc.description ?? undefined,
+    image:       doc.image       ?? undefined,
     createdAt:   doc.createdAt,
     updatedAt:   doc.updatedAt
   };

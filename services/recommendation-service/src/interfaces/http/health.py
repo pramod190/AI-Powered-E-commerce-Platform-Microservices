@@ -18,11 +18,11 @@ router = APIRouter(tags=["health"])
 # Service clients
 product_client = ProductServiceClient()
 order_client = OrderServiceClient()
+ml_engine = CollaborativeFilteringEngine()
 
 
 @router.get("/health", response_model=HealthResponse)
 async def health_check(
-    ml_engine: CollaborativeFilteringEngine = None,
     session: Session = Depends(get_db_session),
 ):
     """
