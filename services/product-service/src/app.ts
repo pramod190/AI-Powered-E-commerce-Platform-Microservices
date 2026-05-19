@@ -27,7 +27,7 @@ export function buildApp(): Express {
   );
 
   app.use(helmet());
-  app.use(compression());
+  app.use(compression() as any);
   app.use(express.json({ limit: "1mb" }));
 
   const origins = env.CORS_ORIGINS.length ? env.CORS_ORIGINS : undefined;
