@@ -30,8 +30,20 @@ export function buildApp(): Express {
   app.use(compression() as any);
   app.use(express.json({ limit: "1mb" }));
 
-  const origins = env.CORS_ORIGINS.length ? env.CORS_ORIGINS : undefined;
-  app.use(cors({ origin: origins, credentials: true }));
+  const configuredOrigins = env.CORS_ORIGINS.length ? env.CORS_ORIGINS : [];
+  app.use(
+    cors({
+      origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (/\.vercel\.app$/.test(origin)) return callback(null, true);
+        if (configuredOrigins.length === 0 || configuredOrigins.includes(origin)) {
+          return callback(null, true);
+        }
+        callback(new Error(`CORS: origin ${origin} not allowed`));
+      },
+      credentials: true,
+    })
+  );
 
   app.use(apiRouter);
 
