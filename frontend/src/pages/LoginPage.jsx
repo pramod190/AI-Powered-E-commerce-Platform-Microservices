@@ -17,7 +17,7 @@ export function LoginPage() {
     e.preventDefault()
     setError('')
     if (!validateEmail(email))    { setError('Please enter a valid email address'); return }
-    if (!validatePassword(password)) { setError('Password must be at least 6 characters'); return }
+    if (password.length < 8) { setError('Password must be at least 8 characters'); return }
     setLoading(true)
     const result = await login(email, password)
     setLoading(false)

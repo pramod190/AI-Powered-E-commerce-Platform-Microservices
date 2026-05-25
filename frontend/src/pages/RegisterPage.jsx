@@ -22,7 +22,7 @@ export function RegisterPage() {
 
     if (!name.trim())           { setError('Full name is required'); return }
     if (!validateEmail(email))  { setError('Please enter a valid email'); return }
-    if (!validatePassword(password)) { setError('Password must be at least 6 characters'); return }
+    if (password.length < 8) { setError('Password must be at least 8 characters'); return }
     if (password !== confirmPassword) { setError('Passwords do not match'); return }
 
     setLoading(true)
@@ -179,7 +179,7 @@ export function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="input-field pl-11 pr-12"
-                  placeholder="Min. 6 characters"
+                  placeholder="Min. 8 characters"
                   required
                 />
                 <button
