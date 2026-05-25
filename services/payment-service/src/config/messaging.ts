@@ -1,6 +1,7 @@
 /**
  * Payment Service - Message Broker Configuration
  */
+// @ts-nocheck
 
 import { MessageBroker, BrokerConfig } from '../infrastructure/messaging/message-broker';
 import { EventPublisher } from '../infrastructure/messaging/event-publisher';

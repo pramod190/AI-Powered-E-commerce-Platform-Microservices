@@ -6,13 +6,13 @@ let redisClient: RedisClientType;
 
 export async function initRedis(): Promise<RedisClientType> {
   redisClient = createClient({
-    host: env.REDIS_HOST,
-    port: env.REDIS_PORT,
-    db: env.REDIS_DB,
-    password: env.REDIS_PASSWORD || undefined,
     socket: {
+      host: env.REDIS_HOST,
+      port: env.REDIS_PORT,
       reconnectStrategy: (retries) => Math.min(retries * 50, 500)
-    }
+    },
+    password: env.REDIS_PASSWORD || undefined,
+    database: env.REDIS_DB,
   });
 
   redisClient.on("error", (err) => logger.error({ err }, "redis error"));

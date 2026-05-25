@@ -21,11 +21,11 @@ async function enrichCartWithPricing(cart: any) {
     return { ...cart, total: 0, itemCount: 0 };
   }
 
-  const productIds = cart.items.map((item) => item.productId);
+  const productIds = cart.items.map((item: { productId: string; quantity: number }) => item.productId);
   const products = await productServiceClient.getProducts(productIds);
 
   let total = 0;
-  const enrichedItems = cart.items.map((item) => {
+  const enrichedItems = cart.items.map((item: { productId: string; quantity: number; [key: string]: unknown }) => {
     const product = products.get(item.productId);
     if (!product) {
       throw new AppError({

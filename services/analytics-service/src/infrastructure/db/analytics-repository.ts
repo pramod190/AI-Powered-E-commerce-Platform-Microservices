@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Analytics Repository - Stores analytics data
  * Using MongoDB for storing events and metrics

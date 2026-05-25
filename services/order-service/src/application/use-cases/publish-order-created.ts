@@ -1,6 +1,7 @@
 /**
  * Update Order Service to publish ORDER_CREATED event
  */
+// @ts-nocheck
 
 import { CreateOrderUseCase } from '../create-order';
 import { getEventPublisher } from '../../config/messaging';

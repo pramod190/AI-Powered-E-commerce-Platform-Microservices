@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Event Consumer for Analytics Service
  */

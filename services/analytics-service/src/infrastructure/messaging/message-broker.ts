@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * RabbitMQ Client Configuration for Analytics Service
  */

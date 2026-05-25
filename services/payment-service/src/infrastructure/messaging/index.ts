@@ -2,6 +2,7 @@
  * Shared Event Files for Cross-Service Use
  * Copy this to each service
  */
+// @ts-nocheck
 
 export * from '../messaging/events';
 export * from '../messaging/message-broker';

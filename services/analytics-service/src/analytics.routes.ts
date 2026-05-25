@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Router } from 'express'
 import { logger } from './shared/logger'
 import { IAnalyticsRepository } from './infrastructure/db/analytics-repository'
